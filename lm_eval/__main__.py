@@ -161,20 +161,21 @@ def setup_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--check_integrity",
-        action="store_true",
+        type=str,
+        default=False,
         help="Whether to run the relevant part of the test suite for the tasks.",
     )
     parser.add_argument(
         "--write_out",
         "-w",
-        action="store_true",
+        type=str,
         default=False,
         help="Prints the prompt for the first few documents.",
     )
     parser.add_argument(
         "--log_samples",
         "-s",
-        action="store_true",
+        type=str,
         default=False,
         help="If True, write out all model outputs and documents for per-sample measurement and post-hoc analysis. Use with --output_path.",
     )
@@ -199,13 +200,13 @@ def setup_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--fewshot_as_multiturn",
-        action="store_true",
+        type=str,
         default=False,
         help="If True, uses the fewshot as a multi-turn conversation",
     )
     parser.add_argument(
         "--show_config",
-        action="store_true",
+        type=str,
         default=False,
         help="If True, shows the the full config of all tasks at the end of the evaluation.",
     )
@@ -254,7 +255,7 @@ def setup_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--predict_only",
         "-x",
-        action="store_true",
+        type=str,
         default=False,
         help="Use with --log_samples. Only model outputs will be saved and metrics will not be evaluated.",
     )
@@ -276,12 +277,14 @@ def setup_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--trust_remote_code",
-        action="store_true",
+        type=str,
+        default=False,
         help="Sets trust_remote_code to True to execute code to create HF Datasets from the Hub",
     )
     parser.add_argument(
         "--confirm_run_unsafe_code",
-        action="store_true",
+        type=str,
+        default=False,
         help="Confirm that you understand the risks of running unsafe code for tasks that require it",
     )
     parser.add_argument(
@@ -303,6 +306,7 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         # we allow for args to be passed externally, else we parse them ourselves
         parser = setup_parser()
         args = parse_eval_args(parser)
+        print(args)
 
     # defer loading `lm_eval` submodules for faster CLI load
     from lm_eval import evaluator, utils
@@ -534,7 +538,31 @@ def cli_evaluate(args: Union[argparse.Namespace, None] = None) -> None:
         if args.wandb_args:
             # Tear down wandb run once all the logging is done.
             wandb_logger.run.finish()
+    
+    return results
+'''
+usage:
+
+lm_eval --model hf \
+   --model_args pretrained=/data/wlj/pretrained/Qwen/Qwen3-0.6B \
+   --tasks hellaswag \
+   --device cuda:0 \
+   --batch_size 8
 
 
+lm_eval --model vllm \
+   --model_args pretrained=/data/wlj/pretrained/Qwen/Qwen3-0.6B \
+   --tasks hellaswag \
+   --device cuda:0 \
+   --batch_size 8
+
+
+lm_eval --model vllm \
+   --model_args pretrained=/data/wlj/pretrained/Qwen_quantize-awq-sym/Qwen3-0.6B \
+   --tasks hellaswag \
+   --device cuda:0 \
+   --batch_size 8
+
+'''
 if __name__ == "__main__":
     cli_evaluate()

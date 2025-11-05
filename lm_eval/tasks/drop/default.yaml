@@ -1,5 +1,5 @@
 task: drop
-dataset_path: /data8T/Text/DROP
+dataset_path: /data/wlj/datasets/Text/DROP
 output_type: generate_until
 training_split: train
 validation_split: validation
