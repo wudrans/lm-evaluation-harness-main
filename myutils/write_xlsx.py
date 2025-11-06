@@ -141,7 +141,7 @@ def write_xlsx_eval_preface(mysheet, style, start_row=1, max_column=8):
 def write_llm_content(mysheet, style, results, row=1, col=1):
     for i, (datasets,r) in enumerate(results['results'].items()):
         model = results['configs'][datasets]['metadata']['pretrained']
-        print(model)
+        print("write_llm_content, model = %s" % model)
         model = os.path.basename(model)
 
         time_ = r['runtime']

@@ -52,10 +52,13 @@ if __name__ == '__main__':
     # #               'Qwen3-4B-Instruct-2507', 'Qwen3-4B-Instruct-2507-FP8', 
     # #               'Qwen3-4B-Thinking-2507', 'Qwen3-4B-Thinking-2507-FP8']
     # print(model_list)
-    model_list = ['Qwen3-0.6B', 
+    model_list = [
+                  'Qwen3-0.6B', 
                   'Qwen3-1.7B', 
-                #   'Qwen3-4B-Instruct-2507', 'Qwen3-4B-Instruct-2507-FP8',
-                #   'Qwen3-4B-Thinking-2507', 'Qwen3-4B-Thinking-2507-FP8'
+                  'Qwen3-4B-Instruct-2507', 
+                  'Qwen3-4B-Instruct-2507-FP8',
+                #   'Qwen3-4B-Thinking-2507',
+                #   'Qwen3-4B-Thinking-2507-FP8'
                   ]
     model_root_path = [
                        '/data/wlj/pretrained/Qwen', #"hf"
@@ -77,10 +80,15 @@ if __name__ == '__main__':
             # 读进来，更新，写出去
             conifgs = yaml_load(config_path)
             conifgs['model'] = model[j]
-            if j == 2:
-                conifgs['model_args'] = f"pretrained={os.path.join(model_root, model_name)},quantization=fp8,dtype=bfloat16,gpu_memory_utilization=0.8"
-            else:
-                conifgs['model_args'] = f"pretrained={os.path.join(model_root, model_name)}"
+            model_path = os.path.join(model_root, model_name)
+            if conifgs['model'] == "hf":
+                conifgs['model_args'] = f"pretrained={model_path}"
+            elif conifgs['model'] == "vllm":
+                if j == 2:
+                    conifgs['model_args'] = f"pretrained={model_path},quantization=fp8,dtype=bfloat16,max_model_len=40960,gpu_memory_utilization=0.5"
+                else:
+                    conifgs['model_args'] = f"pretrained={model_path},max_model_len=40960,gpu_memory_utilization=0.5"
+            logger.info("model_args: %s" % conifgs['model_args'])
             write_yaml(config_path, conifgs)
         
             # ====================== get configs ====================== 

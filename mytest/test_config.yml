@@ -1,6 +1,6 @@
 model: vllm
 tasks: hellaswag
-model_args: pretrained=/data/wlj/pretrained/Qwen/Qwen3-0.6B
+model_args: pretrained=/data/wlj/pretrained/Qwen/Qwen3-4B-Instruct-2507-FP8,max_model_len=40960,gpu_memory_utilization=0.5
 num_fewshot: null
 batch_size: '8'
 max_batch_size: null
@@ -14,7 +14,7 @@ check_integrity: false
 write_out: false
 log_samples: false
 system_instruction: null
-apply_chat_template: false
+apply_chat_template: true
 fewshot_as_multiturn: false
 show_config: false
 include_path: null
