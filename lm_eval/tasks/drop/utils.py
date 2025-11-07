@@ -46,27 +46,27 @@ def get_answers(doc):
     def get_candidate(doc):
         """新版 DROP 数据集已经移除了 answer 字段，只保留 validated_answers
         从文档中提取答案，兼容新旧两种格式"""
-    candidates = []
+        candidates = []
 
-    # 新版：只有 validated_answers
-    if "validated_answers" in doc:
-        candidates.extend(_flatten_validated_answers(doc["validated_answers"]))
+        # 新版：只有 validated_answers
+        if "validated_answers" in doc:
+            candidates.extend(_flatten_validated_answers(doc["validated_answers"]))
 
-    # 旧版：有 answer 字段
-    if "answer" in doc:
-        candidates.append(doc["answer"])
+        # 旧版：有 answer 字段
+        if "answers" in doc:
+            candidates.append(doc["answers"])
 
-    # 如果都没有，返回空列表或默认值
-    if not candidates:
-        # 可选：使用一些启发式方法或返回空字符串
-        return [{"number": "", "date": {"day": "", "month": "", "year": ""}, "spans": [""]}]
+        # 如果都没有，返回空列表或默认值
+        if not candidates:
+            # 可选：使用一些启发式方法或返回空字符串
+            return [{"number": "", "date": {"day": "", "month": "", "year": ""}, "spans": [""]}]
 
-        return candidates
-
+        return candidates    
+    print('doc', doc)
     answers = []
     answers_set = set()
-    # candidates = [doc["answer"]] + _flatten_validated_answers(doc["validated_answers"])
-    candidates = get_candidate(doc)
+    candidates = [doc["answer"]] + _flatten_validated_answers(doc["validated_answers"])
+    # candidates = get_candidate(doc)
 
     for candidate in candidates:
         answer = parse_answer(candidate)

@@ -53,10 +53,10 @@ if __name__ == '__main__':
     # #               'Qwen3-4B-Thinking-2507', 'Qwen3-4B-Thinking-2507-FP8']
     # print(model_list)
     model_list = [
-                  'Qwen3-0.6B', 
-                  'Qwen3-1.7B', 
+                #   'Qwen3-0.6B', 
+                #   'Qwen3-1.7B', 
                   'Qwen3-4B-Instruct-2507', 
-                  'Qwen3-4B-Instruct-2507-FP8',
+                #   'Qwen3-4B-Instruct-2507-FP8',
                 #   'Qwen3-4B-Thinking-2507',
                 #   'Qwen3-4B-Thinking-2507-FP8'
                   ]
@@ -81,11 +81,16 @@ if __name__ == '__main__':
             conifgs = yaml_load(config_path)
             conifgs['model'] = model[j]
             model_path = os.path.join(model_root, model_name)
+            if not os.path.exists(model_path):
+                continue
+
             if conifgs['model'] == "hf":
                 conifgs['model_args'] = f"pretrained={model_path}"
             elif conifgs['model'] == "vllm":
                 if j == 2:
                     conifgs['model_args'] = f"pretrained={model_path},quantization=fp8,dtype=bfloat16,max_model_len=40960,gpu_memory_utilization=0.5"
+                elif j == 3:
+                    conifgs['model_args'] = f"pretrained={model_path},quantization=compressed-tensors,dtype=half,max_model_len=40960,gpu_memory_utilization=0.5"
                 else:
                     conifgs['model_args'] = f"pretrained={model_path},max_model_len=40960,gpu_memory_utilization=0.5"
             logger.info("model_args: %s" % conifgs['model_args'])

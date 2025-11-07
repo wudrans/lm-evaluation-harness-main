@@ -1,6 +1,6 @@
 model: vllm
 tasks: hellaswag
-model_args: pretrained=/data/wlj/pretrained/Qwen/Qwen3-4B-Instruct-2507-FP8,max_model_len=40960,gpu_memory_utilization=0.5
+model_args: pretrained=/data/wlj/pretrained/Qwen_quantize-awq-sym/Qwen3-4B-Instruct-2507,quantization=compressed-tensors,dtype=half,max_model_len=40960,gpu_memory_utilization=0.5
 num_fewshot: null
 batch_size: '8'
 max_batch_size: null
