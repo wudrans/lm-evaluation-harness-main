@@ -140,20 +140,32 @@ def write_xlsx_eval_preface(mysheet, style, start_row=1, max_column=8):
 
 def write_llm_content(mysheet, style, results, row=1, col=1):
     for i, (datasets,r) in enumerate(results['results'].items()):
+        print('datasets = %s, results = %s' %(datasets, r))
+        
         model = results['configs'][datasets]['metadata']['pretrained']
         print("write_llm_content, model = %s" % model)
         model = os.path.basename(model)
 
+        result_list = list(r.values())
+    
         time_ = r['runtime']
-
-        acc = "%.4f ± %.4f" % (r['acc,none'], r['acc_stderr,none'])
-        acc_norm = "%.4f ± %.4f" % (r['acc_norm,none'], r['acc_norm_stderr,none'])
+        acc = "%.4f ± %.4f" % (result_list[0], result_list[1])
+        acc_norm = "%.4f ± %.4f" % (result_list[2], result_list[3])
+        
+        # if datasets == 'hellaswag':
+        #     acc = "%.4f ± %.4f" % (r['acc,none'], r['acc_stderr,none'])
+        #     acc_norm = "%.4f ± %.4f" % (r['acc_norm,none'], r['acc_norm_stderr,none'])
+        # elif datasets == 'drop':
+        #     acc = "%.4f ± %.4f" % (r['em,none'], r['em_stderr,none'])
+        #     acc_norm = "%.4f ± %.4f" % (r['f1,none'], r['f1_norm_stderr,none'])
         
         mysheet.cell(row + i, 1, value=datasets).style = style
         mysheet.cell(row + i, 2, value=model).style = style
         mysheet.cell(row + i, col, value=acc).style = style
         mysheet.cell(row + i, col + 1, value=acc_norm).style = style
         mysheet.cell(row + i, col + 2, value=time_).style = style
+
+        
 
     return mysheet
 

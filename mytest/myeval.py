@@ -53,11 +53,11 @@ if __name__ == '__main__':
     # #               'Qwen3-4B-Thinking-2507', 'Qwen3-4B-Thinking-2507-FP8']
     # print(model_list)
     model_list = [
-                #   'Qwen3-0.6B', 
-                #   'Qwen3-1.7B', 
+                  'Qwen3-0.6B', 
+                  'Qwen3-1.7B', 
                   'Qwen3-4B-Instruct-2507', 
                 #   'Qwen3-4B-Instruct-2507-FP8',
-                #   'Qwen3-4B-Thinking-2507',
+                  'Qwen3-4B-Thinking-2507',
                 #   'Qwen3-4B-Thinking-2507-FP8'
                   ]
     model_root_path = [
